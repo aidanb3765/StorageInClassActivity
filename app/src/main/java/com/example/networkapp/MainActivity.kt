@@ -14,6 +14,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
 import org.json.JSONObject
+import android.content.Context
+import android.content.SharedPreferences
 
 // TODO (1: Fix any bugs)
 // TODO (2: Add function saveComic(...) to save and load comic info automatically when app starts)
@@ -26,12 +28,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var numberEditText: EditText
     lateinit var showButton: Button
     lateinit var comicImageView: ImageView
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         requestQueue = Volley.newRequestQueue(this)
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
 
         titleTextView = findViewById<TextView>(R.id.comicTitleTextView)
         descriptionTextView = findViewById<TextView>(R.id.comicDescriptionTextView)
@@ -57,6 +61,12 @@ class MainActivity : AppCompatActivity() {
         titleTextView.text = comicObject.getString("title")
         descriptionTextView.text = comicObject.getString("alt")
         Picasso.get().load(comicObject.getString("img")).into(comicImageView)
+    }
+
+    private fun saveComic(comicObject: JSONObject) {
+        with(sharedPreferences) {
+            apply()
+        }
     }
 
 
