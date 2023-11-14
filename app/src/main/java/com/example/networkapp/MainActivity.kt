@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
             downloadComic(numberEditText.text.toString())
         }
 
+        loadComic()
     }
 
     private fun downloadComic (comicId: String) {
@@ -70,7 +71,20 @@ class MainActivity : AppCompatActivity() {
             putString("image", comicObject.getString("img"))
             apply()
         }
-    }
 
+    }
+    
+    private fun loadComic() {
+        val title = sharedPreferences.getString("title", "")
+        val description = sharedPreferences.getString("description", "")
+        val imageURL = sharedPreferences.getString("image", "")
+
+        titleTextView.text = title
+        descriptionTextView.text = description
+
+        if(imageURL!!.isNotEmpty()) {
+            Picasso.get().load(imageURL).into(comicImageView)
+        }
+    }
 
 }
