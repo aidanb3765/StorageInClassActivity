@@ -64,7 +64,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveComic(comicObject: JSONObject) {
-        with(sharedPreferences) {
+        with(sharedPreferences.edit()) {
+            putString("title", comicObject.getString("title"))
+            putString("description", comicObject.getString("alt"))
+            putString("image", comicObject.getString("img"))
             apply()
         }
     }
