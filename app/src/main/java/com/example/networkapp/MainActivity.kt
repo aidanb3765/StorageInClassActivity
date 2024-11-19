@@ -55,12 +55,17 @@ class MainActivity : AppCompatActivity() {
         loadComic()
     }
 
-    private fun downloadComic (comicId: String) {
+    private fun downloadComic(comicId: String) {
         val url = "https://xkcd.com/$comicId/info.0.json"
-        requestQueue.add (
-            JsonObjectRequest(url, {showComic(it)}, {
+        val jsonObjectRequest = JsonObjectRequest(url,
+            { response ->
+                showComic(response)
+                saveComic(response)
+            },
+            { error ->
+                Toast.makeText(this, "Failed loading comic: ${error.message}", Toast.LENGTH_SHORT).show()
             })
-        )
+        requestQueue.add(jsonObjectRequest)
     }
 
     private fun showComic (comicObject: JSONObject) {
