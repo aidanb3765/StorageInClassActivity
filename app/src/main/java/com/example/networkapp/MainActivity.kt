@@ -44,7 +44,12 @@ class MainActivity : AppCompatActivity() {
         comicImageView = findViewById<ImageView>(R.id.comicImageView)
 
         showButton.setOnClickListener {
-            downloadComic(numberEditText.text.toString())
+            val comic = numberEditText.text.toString().trim()
+            if (comic.isNotEmpty()) {
+                downloadComic(comic)
+            } else {
+                Toast.makeText(this, "Please enter a comic number", Toast.LENGTH_SHORT).show()
+            }
         }
 
         loadComic()
