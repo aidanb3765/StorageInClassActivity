@@ -68,11 +68,25 @@ class MainActivity : AppCompatActivity() {
         requestQueue.add(jsonObjectRequest)
     }
 
-    private fun showComic (comicObject: JSONObject) {
-        titleTextView.text = comicObject.getString("title")
-        descriptionTextView.text = comicObject.getString("alt")
-        Picasso.get().load(comicObject.getString("img")).into(comicImageView)
+    private fun showComic(comicObject: JSONObject) {
+        try {
+            val title = comicObject.optString("title", "No title")
+            val description = comicObject.optString("alt", "No description")
+            val imageUrl = comicObject.optString("img", "")
+
+            titleTextView.text = title
+            descriptionTextView.text = description
+
+            if (imageUrl.isNotEmpty()) {
+                Picasso.get().load(imageUrl).into(comicImageView)
+            } else {
+                Toast.makeText(this, "Image not found", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error displaying comic: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
+
 
     private fun saveComic(comicObject: JSONObject) {
         with(sharedPreferences.edit()) {
@@ -92,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         titleTextView.text = title
         descriptionTextView.text = description
 
-        if(imageURL!!.isNotEmpty()) {
+        if (!imageURL.isNullOrEmpty()) {
             Picasso.get().load(imageURL).into(comicImageView)
         }
     }
